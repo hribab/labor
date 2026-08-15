@@ -1,0 +1,23 @@
+{
+  "name": "Labor",
+  "short_name": "Labor",
+  "description": "Free, open-source autonomous product builder that generates, deploys, releases, and manages software in your cloud.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06080d",
+  "theme_color": "#06080d",
+  "icons": [
+    {
+      "src": "/labor-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/labor-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

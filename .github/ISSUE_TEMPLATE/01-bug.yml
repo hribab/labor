@@ -1,0 +1,74 @@
+name: Bug report
+description: Tell us about a reproducible problem in Labor.
+title: "[Bug]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Labor. Remove credentials, tokens, customer data, and private project details before submitting.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the failure and the impact in plain language.
+      placeholder: Labor was expected to... Instead...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open...
+        2. Click...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Frontend or authentication
+        - Model configuration
+        - Google Cloud provisioning
+        - Product generation
+        - Deployment or Hosting
+        - Release or Analytics
+        - Agent
+        - Evolver
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: Commit SHA, branch, or deployment date
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, operating system, Node version, and whether this was self-hosted. Do not include project IDs or credentials.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Redacted logs or screenshots
+      description: Remove tokens, email addresses, project IDs, object URLs, private source, and customer data.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed credentials, private data, and sensitive project details.
+          required: true
+        - label: This is not a security vulnerability. Security issues must follow SECURITY.md.
+          required: true

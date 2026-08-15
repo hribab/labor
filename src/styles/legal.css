@@ -1,0 +1,209 @@
+.labor-legal {
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+  background: #06080d;
+}
+
+.labor-legal::before {
+  position: fixed;
+  inset: -8%;
+  z-index: -2;
+  background: url("/assets/liquid-glass-background.png") center / min(108vw, 2100px)
+    auto no-repeat;
+  content: "";
+  opacity: 0.42;
+  pointer-events: none;
+  transform: scale(1.05);
+}
+
+.labor-legal::after {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(2, 4, 9, 0.78);
+  content: "";
+  pointer-events: none;
+}
+
+.labor-legal__header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 8, 13, 0.7);
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+  backdrop-filter: blur(24px) saturate(135%);
+}
+
+.labor-legal__toc nav {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.labor-legal__toc a {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr);
+  align-items: baseline;
+  min-height: 2rem;
+  color: #64748b;
+  font-size: 0.75rem;
+  line-height: 1.15rem;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.labor-legal__toc a:hover {
+  color: #e2e8f0;
+}
+
+.labor-legal__toc a:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid rgba(196, 181, 253, 0.8);
+  outline-offset: 3px;
+}
+
+.labor-legal__toc a span {
+  color: rgba(196, 181, 253, 0.45);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem;
+}
+
+.labor-legal__section {
+  scroll-margin-top: 6.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.085);
+  padding-block: 2.35rem;
+}
+
+.labor-legal__section-heading {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  align-items: baseline;
+}
+
+.labor-legal__section-heading span {
+  color: rgba(196, 181, 253, 0.55);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.6875rem;
+}
+
+.labor-legal__section-heading h2 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.6rem;
+}
+
+.labor-legal__prose {
+  margin-top: 1.1rem;
+  padding-left: 2.4rem;
+  color: #94a3b8;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.labor-legal__prose > * + * {
+  margin-top: 1rem;
+}
+
+.labor-legal__prose h3 {
+  margin-top: 1.6rem;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.labor-legal__prose strong {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.labor-legal__prose a,
+.labor-legal__footer a {
+  color: #c4b5fd;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+.labor-legal__prose a:hover,
+.labor-legal__footer a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.labor-legal__prose a:focus-visible,
+.labor-legal__footer a:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid rgba(196, 181, 253, 0.8);
+  outline-offset: 3px;
+}
+
+.labor-legal__list {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.labor-legal__list li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.labor-legal__list li::before {
+  position: absolute;
+  top: 0.66rem;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(196, 181, 253, 0.7);
+  content: "";
+}
+
+.labor-legal__notice {
+  border: 1px solid rgba(196, 181, 253, 0.15);
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.06);
+  padding: 1rem 1.1rem;
+  color: #cbd5e1;
+}
+
+.labor-legal__footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(4, 6, 11, 0.42);
+}
+
+@media (max-width: 1023px) {
+  .labor-legal__toc {
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+    scrollbar-width: thin;
+  }
+
+  .labor-legal__toc nav {
+    display: flex;
+    min-width: max-content;
+    gap: 1rem;
+  }
+
+  .labor-legal__toc a {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0.4rem;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 639px) {
+  .labor-legal__section-heading {
+    grid-template-columns: 1.9rem minmax(0, 1fr);
+  }
+
+  .labor-legal__prose {
+    padding-left: 1.9rem;
+    font-size: 0.875rem;
+  }
+}

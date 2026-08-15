@@ -1,0 +1,569 @@
+.labor-login {
+  isolation: isolate;
+  background: rgba(2, 4, 9, 0.86);
+}
+
+.labor-login::before {
+  position: fixed;
+  inset: -8%;
+  z-index: -2;
+  background: url("/assets/liquid-glass-background.png") center / min(108vw, 2100px)
+    auto no-repeat;
+  content: "";
+  opacity: 0.72;
+  transform: scale(1.05);
+  animation: labor-login-background 34s ease-in-out infinite alternate;
+}
+
+.labor-login::after {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(2, 4, 9, 0.58);
+  content: "";
+  pointer-events: none;
+}
+
+.labor-login__surface {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 28px;
+  background: rgba(7, 9, 15, 0.76);
+  box-shadow:
+    0 42px 140px rgba(0, 0, 0, 0.78),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    inset 0 -1px 0 rgba(104, 84, 190, 0.1);
+  -webkit-backdrop-filter: blur(30px) saturate(145%);
+  backdrop-filter: blur(30px) saturate(145%);
+  animation: labor-login-arrive 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.labor-login__surface::before {
+  position: absolute;
+  top: -140%;
+  left: -38%;
+  z-index: 3;
+  width: 34%;
+  height: 330%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.045),
+    rgba(215, 207, 255, 0.09),
+    transparent
+  );
+  content: "";
+  pointer-events: none;
+  transform: rotate(13deg);
+  animation: labor-login-shine 11s ease-in-out 1.2s infinite;
+}
+
+.labor-login__masthead {
+  position: relative;
+  z-index: 4;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  background: rgba(7, 9, 15, 0.7);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+}
+
+.labor-login__brand-mark,
+.labor-login__eyebrow {
+  border: 1px solid rgba(196, 181, 253, 0.24);
+  background: rgba(139, 92, 246, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 28px rgba(124, 58, 237, 0.08);
+}
+
+.labor-login__live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #86efac;
+  box-shadow: 0 0 12px rgba(134, 239, 172, 0.6);
+}
+
+.labor-login__hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.labor-login__hero::after {
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  z-index: -1;
+  width: min(72vw, 680px);
+  height: 260px;
+  border: 1px solid rgba(167, 139, 250, 0.08);
+  border-radius: 50%;
+  content: "";
+  opacity: 0.9;
+  transform: translateX(-50%) perspective(520px) rotateX(68deg);
+  box-shadow:
+    0 0 80px rgba(139, 92, 246, 0.09),
+    inset 0 0 80px rgba(56, 189, 248, 0.035);
+}
+
+.labor-login__google-button {
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 10px;
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.labor-login__google-button:focus-visible {
+  outline: 2px solid rgba(196, 181, 253, 0.9);
+  outline-offset: 4px;
+}
+
+.labor-login__error {
+  border: 1px solid rgba(248, 113, 113, 0.24);
+  border-radius: 10px;
+  background: rgba(127, 29, 29, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.labor-login__journey {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+.labor-login__journey-line {
+  position: absolute;
+  top: 22px;
+  right: 9%;
+  left: 9%;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.labor-login__journey-line::after {
+  position: absolute;
+  top: 0;
+  left: -22%;
+  width: 22%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(196, 181, 253, 0.95),
+    transparent
+  );
+  content: "";
+  animation: labor-login-route 4.8s ease-in-out infinite;
+}
+
+.labor-login__journey-step {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+}
+
+.labor-login__journey-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(13, 16, 26, 0.86);
+  color: rgba(221, 214, 254, 0.78);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 12px 30px rgba(0, 0, 0, 0.28);
+  animation: labor-login-node 6s ease-in-out infinite;
+  animation-delay: calc(var(--labor-step) * 520ms);
+}
+
+.labor-login__section,
+.labor-login__footer {
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+.labor-login__ownership-line {
+  overflow-x: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.labor-login__ownership-line::-webkit-scrollbar {
+  display: none;
+}
+
+.labor-login__comparison {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  background: rgba(3, 5, 10, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.labor-login__workflow {
+  padding: 1.5rem;
+}
+
+.labor-login__workflow.is-labor {
+  border-left: 1px solid rgba(196, 181, 253, 0.14);
+  background: rgba(124, 58, 237, 0.055);
+}
+
+.labor-login__evolver {
+  overflow: hidden;
+  background: rgba(13, 10, 24, 0.2);
+}
+
+.labor-login__zero-one {
+  position: relative;
+  width: min(100%, 420px);
+  height: 230px;
+  margin-inline: auto;
+}
+
+.labor-login__zero-node,
+.labor-login__one-node {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border-radius: 999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.25rem;
+  transform: translateY(-50%);
+}
+
+.labor-login__zero-node {
+  left: 1%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 10, 17, 0.88);
+  color: #94a3b8;
+}
+
+.labor-login__one-node {
+  left: 42%;
+  border: 1px solid rgba(196, 181, 253, 0.42);
+  background: rgba(124, 58, 237, 0.14);
+  color: #ede9fe;
+  box-shadow: 0 0 34px rgba(139, 92, 246, 0.2);
+  animation: labor-login-one 3.2s ease-in-out infinite;
+}
+
+.labor-login__zero-path {
+  position: absolute;
+  top: 50%;
+  left: calc(1% + 58px);
+  width: calc(41% - 58px);
+  height: 1px;
+  overflow: hidden;
+  background: rgba(196, 181, 253, 0.25);
+}
+
+.labor-login__zero-path span {
+  position: absolute;
+  top: -2px;
+  left: -7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #ddd6fe;
+  box-shadow: 0 0 10px rgba(221, 214, 254, 0.75);
+  animation: labor-login-zero-path 2.7s ease-in-out infinite;
+}
+
+.labor-login__branches {
+  position: absolute;
+  top: 50%;
+  left: calc(42% + 58px);
+  width: 33%;
+  height: 150px;
+  transform: translateY(-50%);
+}
+
+.labor-login__branches i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  border-right: 1px solid rgba(103, 232, 249, 0.2);
+}
+
+.labor-login__branches i:nth-child(1) {
+  top: 0;
+  border-top: 1px solid rgba(196, 181, 253, 0.3);
+  border-radius: 0 32px 0 0;
+}
+
+.labor-login__branches i:nth-child(2) {
+  top: 50%;
+  height: 1px;
+  border-top: 1px solid rgba(196, 181, 253, 0.28);
+  border-right: 0;
+}
+
+.labor-login__branches i:nth-child(3) {
+  bottom: 0;
+  border-bottom: 1px solid rgba(103, 232, 249, 0.24);
+  border-radius: 0 0 32px;
+}
+
+.labor-login__future-nodes {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  display: flex;
+  height: 164px;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateY(-50%);
+}
+
+.labor-login__future-nodes b {
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(103, 232, 249, 0.5);
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.16);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.15);
+}
+
+.labor-login__hypothesis {
+  border: 1px solid rgba(196, 181, 253, 0.15);
+  border-radius: 14px;
+  background: rgba(124, 58, 237, 0.055);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.labor-login__footer {
+  background: rgba(3, 5, 10, 0.22);
+}
+
+.labor-login__builder-loop svg {
+  animation: labor-login-builder-arrow 3.2s ease-in-out infinite;
+}
+
+.labor-login__builder-loop svg:nth-of-type(2) {
+  animation-delay: 420ms;
+}
+
+.labor-login__builder-loop svg:nth-of-type(3) {
+  animation-delay: 840ms;
+}
+
+@keyframes labor-login-background {
+  0% {
+    transform: translate3d(-1%, -0.5%, 0) scale(1.05);
+  }
+
+  100% {
+    transform: translate3d(1.2%, 0.8%, 0) scale(1.09);
+  }
+}
+
+@keyframes labor-login-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes labor-login-shine {
+  0%,
+  66% {
+    left: -38%;
+    opacity: 0;
+  }
+
+  72% {
+    opacity: 1;
+  }
+
+  90%,
+  100% {
+    left: 112%;
+    opacity: 0;
+  }
+}
+
+@keyframes labor-login-route {
+  0% {
+    left: -22%;
+  }
+
+  72%,
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes labor-login-node {
+  0%,
+  100% {
+    border-color: rgba(255, 255, 255, 0.12);
+    color: rgba(221, 214, 254, 0.72);
+  }
+
+  18% {
+    border-color: rgba(196, 181, 253, 0.42);
+    color: #f5f3ff;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 24px rgba(139, 92, 246, 0.18);
+  }
+
+  38% {
+    border-color: rgba(255, 255, 255, 0.12);
+    color: rgba(221, 214, 254, 0.72);
+  }
+}
+
+@keyframes labor-login-one {
+  0%,
+  100% {
+    box-shadow: 0 0 26px rgba(139, 92, 246, 0.14);
+  }
+
+  50% {
+    box-shadow: 0 0 46px rgba(139, 92, 246, 0.3);
+  }
+}
+
+@keyframes labor-login-zero-path {
+  0% {
+    left: -7px;
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes labor-login-builder-arrow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateX(0);
+  }
+
+  36% {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+}
+
+@media (max-width: 767px) {
+  .labor-login__surface {
+    border-radius: 20px;
+  }
+
+  .labor-login__masthead > :last-child {
+    max-width: 10rem;
+    justify-content: flex-end;
+    text-align: right;
+    line-height: 1.35;
+  }
+
+  .labor-login__journey {
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 320px;
+    text-align: left;
+  }
+
+  .labor-login__journey-line {
+    top: 22px;
+    bottom: 22px;
+    left: 21px;
+    width: 1px;
+    height: auto;
+  }
+
+  .labor-login__journey-line::after {
+    top: -22%;
+    left: 0;
+    width: 1px;
+    height: 22%;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(196, 181, 253, 0.95),
+      transparent
+    );
+    animation: labor-login-route-mobile 4.8s ease-in-out infinite;
+  }
+
+  .labor-login__journey-step {
+    min-height: 76px;
+    align-items: flex-start;
+    padding-left: 62px;
+  }
+
+  .labor-login__journey-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .labor-login__journey-step > :nth-child(2) {
+    margin-top: 0.25rem;
+  }
+
+  .labor-login__workflow.is-labor {
+    border-top: 1px solid rgba(196, 181, 253, 0.14);
+    border-left: 0;
+  }
+}
+
+@keyframes labor-login-route-mobile {
+  0% {
+    top: -22%;
+  }
+
+  72%,
+  100% {
+    top: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .labor-login::before,
+  .labor-login__surface,
+  .labor-login__surface::before,
+  .labor-login__journey-line::after,
+  .labor-login__journey-icon,
+  .labor-login__one-node,
+  .labor-login__zero-path span,
+  .labor-login__builder-loop svg {
+    animation: none;
+  }
+}

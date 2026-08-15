@@ -1,0 +1,60 @@
+# Dependencies and generated output
+node_modules/
+functions/node_modules/
+.pnpm-store/
+dist/
+coverage/
+*.zip
+*.tgz
+
+# Local environment and provider configuration
+.env
+.env.*
+!.env.example
+.envrc
+.direnv/
+functions/.env
+functions/.env.*
+!functions/.env.example
+.firebaserc
+.firebaserc.local
+functions/.runtimeconfig.json
+
+# Credentials and private keys
+*service-account*.json
+*service_account*.json
+*serviceAccount*.json
+*firebase-adminsdk-*.json
+google-credentials*.json
+gcp-credentials*.json
+credentials*.json
+client_secret*.json
+oauth-client*.json
+google-services.json
+GoogleService-Info.plist
+application_default_credentials.json
+.secrets/
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Firebase local state and logs
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+database-debug.log*
+functions-debug.log*
+pubsub-debug.log*
+storage-debug.log*
+ui-debug.log*
+*.log
+
+# Operating-system and editor state
+.DS_Store
+**/.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo

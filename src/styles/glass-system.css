@@ -1,0 +1,362 @@
+:root {
+  color-scheme: dark;
+  --tk-canvas: #06080d;
+  --tk-glass: rgba(15, 18, 27, 0.56);
+  --tk-glass-strong: rgba(10, 12, 19, 0.74);
+  --tk-glass-soft: rgba(255, 255, 255, 0.045);
+  --tk-glass-hover: rgba(255, 255, 255, 0.085);
+  --tk-glass-line: rgba(255, 255, 255, 0.12);
+  --tk-glass-line-strong: rgba(255, 255, 255, 0.2);
+  --tk-glass-highlight: rgba(255, 255, 255, 0.26);
+  --tk-glass-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --tk-glass-shadow-float:
+    0 30px 90px rgba(0, 0, 0, 0.62),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: var(--tk-canvas);
+}
+
+body {
+  color: #d7dce8;
+}
+
+.tk-app-shell {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(180deg, rgba(4, 6, 11, 0.28), rgba(4, 6, 11, 0.68)),
+    linear-gradient(90deg, rgba(4, 6, 11, 0.3), transparent 32%, transparent 68%, rgba(4, 6, 11, 0.25)),
+    var(--tk-canvas) !important;
+}
+
+.tk-app-shell::before {
+  position: fixed;
+  inset: -9%;
+  z-index: -2;
+  background: url("/assets/liquid-glass-background.png") center / cover no-repeat;
+  content: "";
+  opacity: 0.82;
+  pointer-events: none;
+  transform: translate3d(-1.5%, -0.8%, 0) scale(1.06) rotate(-0.35deg);
+  background-size: min(99vw, 1900px) auto;
+  transform-origin: center;
+  will-change: transform;
+  animation: tk-liquid-drift 46s cubic-bezier(0.42, 0, 0.28, 1) infinite
+    alternate;
+}
+
+.tk-app-shell::after {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.018),
+    transparent 32%,
+    rgba(123, 92, 255, 0.025) 72%,
+    transparent
+  );
+  content: "";
+  pointer-events: none;
+}
+
+@keyframes tk-liquid-drift {
+  0% {
+    transform: translate3d(-1.5%, -0.8%, 0) scale(1.06) rotate(-0.35deg);
+  }
+
+  38% {
+    transform: translate3d(1.2%, 0.7%, 0) scale(1.09) rotate(0.25deg);
+  }
+
+  72% {
+    transform: translate3d(-0.4%, 1.2%, 0) scale(1.075) rotate(-0.1deg);
+  }
+
+  100% {
+    transform: translate3d(1.4%, -0.5%, 0) scale(1.085) rotate(0.35deg);
+  }
+}
+
+.tk-page-surface {
+  background: transparent !important;
+}
+
+.tk-release-details-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 1.25rem;
+}
+
+.tk-release-analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tk-release-analytics-wide {
+  grid-column: 1 / -1;
+}
+
+.tk-glass-sidebar {
+  border-color: var(--tk-glass-line) !important;
+  background: rgba(7, 10, 16, 0.54) !important;
+  box-shadow:
+    18px 0 55px rgba(0, 0, 0, 0.22),
+    inset -1px 0 0 rgba(255, 255, 255, 0.045);
+  -webkit-backdrop-filter: blur(22px) saturate(135%);
+  backdrop-filter: blur(22px) saturate(135%);
+}
+
+.tk-glass-panel {
+  border-color: var(--tk-glass-line) !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.072), rgba(255, 255, 255, 0.022)),
+    var(--tk-glass) !important;
+  box-shadow: var(--tk-glass-shadow) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
+}
+
+.tk-glass-card {
+  border-color: rgba(255, 255, 255, 0.105) !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.052), rgba(255, 255, 255, 0.016)),
+    rgba(12, 15, 23, 0.48) !important;
+  box-shadow:
+    0 16px 44px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.tk-glass-float {
+  border-color: var(--tk-glass-line-strong) !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025)),
+    var(--tk-glass-strong) !important;
+  box-shadow: var(--tk-glass-shadow-float) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(145%);
+  backdrop-filter: blur(24px) saturate(145%);
+}
+
+.tk-glass-toolbar {
+  border-color: var(--tk-glass-line) !important;
+  background: rgba(8, 11, 18, 0.66) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+.tk-glass-composer {
+  border-color: var(--tk-glass-line-strong) !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+    rgba(10, 13, 20, 0.66) !important;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 var(--tk-glass-highlight) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(145%);
+  backdrop-filter: blur(24px) saturate(145%);
+}
+
+.tk-glass-message {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.035)),
+    rgba(13, 16, 25, 0.52) !important;
+  box-shadow:
+    0 14px 38px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  backdrop-filter: blur(14px) saturate(125%);
+}
+
+.tk-glass-control {
+  border-color: var(--tk-glass-line) !important;
+  background: rgba(12, 15, 23, 0.5) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  backdrop-filter: blur(14px) saturate(125%);
+}
+
+.tk-glass-control:hover {
+  border-color: var(--tk-glass-line-strong) !important;
+  background: var(--tk-glass-hover) !important;
+}
+
+.tk-glass-selected {
+  border-color: rgba(179, 166, 255, 0.22) !important;
+  background:
+    linear-gradient(100deg, rgba(124, 92, 255, 0.16), rgba(80, 190, 255, 0.06)),
+    rgba(255, 255, 255, 0.055) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 8px 24px rgba(70, 44, 160, 0.08);
+}
+
+.tk-glass-input {
+  border-color: rgba(255, 255, 255, 0.11) !important;
+  background: rgba(3, 6, 12, 0.34) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.tk-glass-input:focus {
+  border-color: rgba(181, 169, 255, 0.42) !important;
+  box-shadow:
+    0 0 0 3px rgba(139, 112, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.tk-composer-input,
+.tk-composer-input:focus,
+.tk-composer-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tk-glass-editor {
+  border-color: var(--tk-glass-line) !important;
+  box-shadow: var(--tk-glass-shadow) !important;
+}
+
+.tk-instant-tooltip {
+  position: relative;
+  display: inline-flex;
+}
+
+.tk-instant-tooltip-label {
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 50%;
+  z-index: 80;
+  visibility: hidden;
+  width: max-content;
+  max-width: 220px;
+  transform: translate(-50%, -2px);
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 5px 8px;
+  color: #111318;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.32);
+  transition:
+    opacity 70ms ease-out,
+    transform 70ms ease-out,
+    visibility 0s linear 70ms;
+}
+
+.tk-instant-tooltip-label::before {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  content: "";
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.tk-instant-tooltip:hover .tk-instant-tooltip-label,
+.tk-instant-tooltip:focus-within .tk-instant-tooltip-label {
+  visibility: visible;
+  transform: translate(-50%, 0);
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.tk-glass-divider {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.tk-scrollbar {
+  scrollbar-color: rgba(201, 207, 222, 0.24) transparent;
+}
+
+.tk-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(201, 207, 222, 0.22);
+}
+
+.markdown-body code {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.07);
+  color: #e4e7ef;
+}
+
+.markdown-body pre {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(2, 5, 10, 0.58);
+}
+
+:focus-visible {
+  outline: 2px solid rgba(184, 171, 255, 0.68);
+  outline-offset: 2px;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .tk-glass-sidebar,
+  .tk-glass-panel,
+  .tk-glass-float,
+  .tk-glass-toolbar,
+  .tk-glass-composer,
+  .tk-glass-message,
+  .tk-glass-control {
+    background: rgba(10, 13, 20, 0.94) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .tk-app-shell::before {
+    background-position: 58% center !important;
+    animation-duration: 58s;
+  }
+
+  .tk-glass-panel,
+  .tk-glass-composer,
+  .tk-glass-float {
+    -webkit-backdrop-filter: blur(16px) saturate(125%);
+    backdrop-filter: blur(16px) saturate(125%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tk-app-shell::before {
+    animation: none;
+    transform: scale(1.06);
+    will-change: auto;
+  }
+
+  .tk-instant-tooltip-label {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .tk-glass-sidebar,
+  .tk-glass-panel,
+  .tk-glass-card,
+  .tk-glass-float,
+  .tk-glass-toolbar,
+  .tk-glass-composer,
+  .tk-glass-message,
+  .tk-glass-control {
+    background: rgba(9, 12, 19, 0.94) !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

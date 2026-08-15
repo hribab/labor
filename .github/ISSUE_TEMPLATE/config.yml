@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Labor Discussions
+    url: https://github.com/hribab/labor/discussions
+    about: Ask questions, share experiments, and discuss large ideas.
+  - name: Security report
+    url: https://github.com/hribab/labor/blob/main/SECURITY.md
+    about: Report vulnerabilities privately. Do not open a public issue.
+  - name: Use Labor
+    url: https://uselabor.com
+    about: Open the public Labor application.

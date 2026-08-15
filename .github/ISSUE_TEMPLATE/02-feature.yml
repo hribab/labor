@@ -1,0 +1,43 @@
+name: Feature proposal
+description: Propose a focused improvement to Labor.
+title: "[Proposal]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Strong proposals begin with the builder problem, not the implementation. Large architecture ideas may be better in GitHub Discussions first.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Builder problem
+      description: Who is blocked today, and what are they trying to accomplish?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe what becomes possible without prescribing every implementation detail.
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Possible approach
+      description: Include UI, backend, migration, permission, and provider-cost implications where relevant.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Project principles
+      options:
+        - label: Generated products remain in the user's connected cloud.
+          required: true
+        - label: The proposal does not create a premium-only capability or paid feature gate.
+          required: true
+        - label: The proposal does not require committing credentials or private Firebase configuration.
+          required: true
