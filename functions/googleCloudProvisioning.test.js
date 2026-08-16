@@ -267,6 +267,18 @@ test("customer-cloud setup grants the runtime service account GA4 Viewer access"
   );
   assert.match(
     cloudConnectionSource,
+    /https:\/\/www\.googleapis\.com\/auth\/analytics\.readonly/
+  );
+  assert.doesNotMatch(
+    cloudConnectionSource,
+    /https:\/\/www\.googleapis\.com\/auth\/analytics\.edit/
+  );
+  assert.match(
+    cloudConnectionSource,
+    /provider\.addScope\(GOOGLE_ANALYTICS_READONLY_SCOPE\)/
+  );
+  assert.match(
+    cloudConnectionSource,
     /provider\.addScope\(GOOGLE_ANALYTICS_MANAGE_USERS_SCOPE\)/
   );
 
@@ -278,8 +290,33 @@ test("customer-cloud setup grants the runtime service account GA4 Viewer access"
     provisioningSource,
     /analyticsadmin\.googleapis\.com\/v1alpha\/\$\{propertyName\}\/accessBindings/
   );
-  assert.match(provisioningSource, /ensureAnalyticsPropertyViewerAccess\(\{/);
+  assert.match(
+    provisioningSource,
+    /ensureVerifiedAnalyticsPropertyViewerAccess\(\{/
+  );
+  assert.match(
+    provisioningSource,
+    /analyticsdata\.googleapis\.com\/v1beta\/\$\{propertyName\}:runReport/
+  );
+  assert.match(
+    provisioningSource,
+    /repairAnalyticsAccess,\s*\n\s*saveConnection/
+  );
   assert.match(provisioningSource, /runtimeAccess: analyticsRuntimeAccess/);
+
+  const coreSource = fs.readFileSync(path.join(__dirname, "index.js"), "utf8");
+  assert.match(coreSource, /action === "repair_google_analytics_access"/);
+  assert.match(
+    coreSource,
+    /googleCloudProvisioner\.repairAnalyticsAccess\(\{/
+  );
+
+  const releaseDetailsSource = fs.readFileSync(
+    path.join(__dirname, "..", "src", "components", "ReleaseDetails.jsx"),
+    "utf8"
+  );
+  assert.match(releaseDetailsSource, /Restore analytics/);
+  assert.match(releaseDetailsSource, /callRepairGoogleAnalyticsAccess\(\{/);
 });
 
 test("Google Search submission stays in the connected customer project", () => {

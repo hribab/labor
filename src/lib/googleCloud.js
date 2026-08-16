@@ -12,8 +12,8 @@ import { auth, firebaseConfig } from "./firebase";
 
 export const GOOGLE_CLOUD_SCOPE =
   "https://www.googleapis.com/auth/cloud-platform";
-export const GOOGLE_ANALYTICS_EDIT_SCOPE =
-  "https://www.googleapis.com/auth/analytics.edit";
+export const GOOGLE_ANALYTICS_READONLY_SCOPE =
+  "https://www.googleapis.com/auth/analytics.readonly";
 export const GOOGLE_ANALYTICS_MANAGE_USERS_SCOPE =
   "https://www.googleapis.com/auth/analytics.manage.users";
 
@@ -72,7 +72,7 @@ export async function requestGoogleCloudAccess(loginHint = "") {
 
   const provider = new GoogleAuthProvider();
   provider.addScope(GOOGLE_CLOUD_SCOPE);
-  provider.addScope(GOOGLE_ANALYTICS_EDIT_SCOPE);
+  provider.addScope(GOOGLE_ANALYTICS_READONLY_SCOPE);
   provider.addScope(GOOGLE_ANALYTICS_MANAGE_USERS_SCOPE);
   provider.setCustomParameters({
     prompt: "select_account consent",
@@ -98,7 +98,7 @@ export async function requestGoogleCloudAccess(loginHint = "") {
       accessToken,
       requestedScope: [
         GOOGLE_CLOUD_SCOPE,
-        GOOGLE_ANALYTICS_EDIT_SCOPE,
+        GOOGLE_ANALYTICS_READONLY_SCOPE,
         GOOGLE_ANALYTICS_MANAGE_USERS_SCOPE,
       ].join(" "),
       connectedEmail: result.user.email || "",

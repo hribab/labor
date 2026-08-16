@@ -113,10 +113,10 @@ export default function Privacy() {
             validate permissions, and manage resources in the project you select.
           </li>
           <li>
-            <strong>Google Analytics edit and user management:</strong> to configure
-            Firebase or GA4 for your released products, grant the Labor runtime the
-            minimum analytics access it needs, and read product analytics for
-            release-management features.
+            <strong>Google Analytics read-only and user management:</strong> to
+            configure Firebase or GA4 for your released products, grant the Labor
+            runtime the minimum analytics access it needs, and read product analytics
+            for release-management features.
           </li>
         </LegalList>
 

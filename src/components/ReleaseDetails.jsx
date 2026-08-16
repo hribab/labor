@@ -40,10 +40,12 @@ import {
   callAddCustomDomain,
   callAppGenerationAgent,
   callApplicationAnalytics,
+  callRepairGoogleAnalyticsAccess,
   callReleaseMarketingAgent,
   callReleasedAppManagerAgent,
 } from "../lib/agent";
 import { db, userFacingFirebaseError } from "../lib/firebase";
+import { requestGoogleCloudAccess } from "../lib/googleCloud";
 import { LABOR_DATA_ROOT_COLLECTION as ROOT_COLLECTION } from "../lib/laborBrand";
 import CloudBuildLogPanel from "./CloudBuildLogPanel";
 import CustomDomainSetup from "./CustomDomainSetup";
@@ -544,6 +546,8 @@ function ReleaseDetails({ release, userDocId, onBack, onOpenRun }) {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [analyticsRepairing, setAnalyticsRepairing] = useState(false);
+  const [analyticsRepairError, setAnalyticsRepairError] = useState("");
   const [error, setError] = useState("");
   const [downloadBusy, setDownloadBusy] = useState(false);
   const [downloadError, setDownloadError] = useState("");
@@ -749,6 +753,41 @@ function ReleaseDetails({ release, userDocId, onBack, onOpenRun }) {
       setError(requestError.message || "Could not refresh analytics.");
     } finally {
       setRefreshing(false);
+    }
+  };
+
+  const repairAnalyticsAccess = async () => {
+    if (analyticsRepairing) return;
+    setAnalyticsRepairing(true);
+    setAnalyticsRepairError("");
+    setError("");
+    try {
+      const connection = await requestGoogleCloudAccess(userDocId);
+      const repaired = await callRepairGoogleAnalyticsAccess({
+        email: userDocId,
+        userDocId,
+        connection,
+      });
+      if (!repaired?.ready) {
+        throw new Error(
+          repaired?.error || "Labor could not restore Analytics access."
+        );
+      }
+      const result = await callApplicationAnalytics({
+        action: "overview",
+        email: userDocId,
+        runid: runId,
+        releaseId,
+        refresh: true,
+      });
+      setAnalytics(result.analytics || null);
+      if (result.release) setDetails(result.release);
+    } catch (requestError) {
+      setAnalyticsRepairError(
+        requestError.message || "Labor could not restore Analytics access."
+      );
+    } finally {
+      setAnalyticsRepairing(false);
     }
   };
 
@@ -1462,8 +1501,42 @@ function ReleaseDetails({ release, userDocId, onBack, onOpenRun }) {
                 </div>
               </>
             ) : (
-              <div className="flex h-44 items-center justify-center px-3 text-center text-[10px] leading-4 text-slate-700">
-                {analytics?.error || "Analytics will appear after traffic arrives."}
+              <div className="flex min-h-44 flex-col items-center justify-center px-3 text-center">
+                {/function service account needs Viewer access to this GA4 property/i.test(
+                  analytics?.error || ""
+                ) ? (
+                  <>
+                    <p className="max-w-xs text-[10px] leading-4 text-slate-600">
+                      Labor&apos;s analytics reader is not connected to this GA4
+                      property yet.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={repairAnalyticsAccess}
+                      disabled={analyticsRepairing}
+                      className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-md border border-violet-200/15 bg-violet-200/[0.07] px-3 text-[10px] font-semibold text-violet-100 transition hover:border-violet-200/30 hover:bg-violet-200/[0.11] disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {analyticsRepairing ? (
+                        <Loader2 size={11} className="animate-spin" />
+                      ) : (
+                        <RefreshCw size={11} />
+                      )}
+                      {analyticsRepairing
+                        ? "Restoring analytics..."
+                        : "Restore analytics"}
+                    </button>
+                    {analyticsRepairError ? (
+                      <p className="mt-2 max-w-sm text-[10px] leading-4 text-red-300">
+                        {analyticsRepairError}
+                      </p>
+                    ) : null}
+                  </>
+                ) : (
+                  <p className="text-[10px] leading-4 text-slate-700">
+                    {analytics?.error ||
+                      "Analytics will appear after traffic arrives."}
+                  </p>
+                )}
               </div>
             )}
             {error ? (

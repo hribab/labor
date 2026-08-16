@@ -100,6 +100,13 @@ export function callGoogleCloudProvisioningStatus(payload) {
   });
 }
 
+export function callRepairGoogleAnalyticsAccess(payload) {
+  return callControlConfigurationAgent({
+    ...payload,
+    action: "repair_google_analytics_access",
+  });
+}
+
 export function callCompleteOnboarding(payload) {
   return callControlConfigurationAgent({
     ...payload,

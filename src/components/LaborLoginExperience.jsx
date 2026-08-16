@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Cloud,
   Code2,
+  Coffee,
   Dna,
   GitBranch,
   Github,
@@ -48,6 +49,13 @@ const PRODUCT_JOURNEY = [
     text: "Features, customer strategy, and growth",
     icon: RefreshCw,
   },
+];
+
+const EVOLVER_AUTOPILOT = [
+  { label: "Idea", icon: Lightbulb },
+  { label: "Build", icon: Code2 },
+  { label: "Ship", icon: Rocket },
+  { label: "Manage", icon: RefreshCw },
 ];
 
 const CONVENTIONAL_WORKFLOW = [
@@ -185,8 +193,6 @@ export default function LaborLoginExperience({ busy, error, onSignIn }) {
     <div className="labor-login fixed inset-0 z-[100] overflow-y-auto p-2 sm:p-5">
       <main className="relative mx-auto flex min-h-full w-full max-w-[1120px] items-center">
         <section
-          role="dialog"
-          aria-modal="true"
           aria-labelledby="labor-login-title"
           aria-describedby="labor-login-intro"
           className="labor-login__surface my-auto flex max-h-[calc(100vh-1rem)] w-full flex-col overflow-hidden text-left text-white sm:max-h-[calc(100vh-2.5rem)]"
@@ -247,9 +253,28 @@ export default function LaborLoginExperience({ busy, error, onSignIn }) {
                 <div ref={signInRef} className="mt-8 inline-flex">
                   <GoogleSignInButton busy={busy} onSignIn={onSignIn} />
                 </div>
-                <div className="mt-3 flex items-center justify-center gap-2 text-[11px] text-slate-500">
-                  <Cloud size={12} strokeWidth={1.7} />
-                  Your code, infrastructure, and releases stay in your cloud.
+                <div className="labor-login__google-disclosure mx-auto mt-4 flex max-w-2xl items-start gap-3 px-4 py-3 text-left">
+                  <ShieldCheck
+                    size={15}
+                    strokeWidth={1.7}
+                    className="mt-0.5 shrink-0 text-violet-200/80"
+                  />
+                  <div>
+                    <div className="text-[11px] font-semibold text-slate-200">
+                      Why Labor uses Google
+                    </div>
+                    <p className="mt-1 text-[11px] leading-5 text-slate-500">
+                      Google Sign-In identifies and protects your workspace. If
+                      you later choose Connect Google Cloud, Labor requests
+                      permission to list your available projects and configure
+                      Firebase and Google Cloud only in the project you select.
+                      Access is used only for workflows you request. See the{" "}
+                      <a href="/privacy" className="text-violet-200/80 hover:text-violet-100">
+                        Privacy Policy
+                      </a>
+                      .
+                    </p>
+                  </div>
                 </div>
                 <nav
                   aria-label="Labor links"
@@ -345,18 +370,19 @@ export default function LaborLoginExperience({ busy, error, onSignIn }) {
                   </h2>
                   <div className="mx-auto mt-5 max-w-2xl space-y-4 text-sm leading-6 text-slate-400 sm:text-base sm:leading-7">
                     <p>
-                      Labor is built on a simple bet: models will become advanced
-                      enough to generate a full, complex product in a single model
-                      call. Instead of giving the model one tiny ticket at a
-                      time, Labor gives it the whole product and asks for the
-                      complete first version.
+                      Labor uses one model call because every planning loop and
+                      handoff costs time and tokens. Frontier models can already
+                      produce a complete first version: frontend, backend, database,
+                      login, analytics, and SEO pages included.
                     </p>
                     <p>
-                      The first versions of many major operating systems and
-                      software stacks were well under one million lines of code.
+                      The first versions of many major operating systems and software
+                      stacks were well under one million lines of code. Models can now
+                      reason across million-token contexts, bringing whole software
+                      systems into a single generation.
                     </p>
                     <p className="font-semibold text-white">
-                      Labor asks model for the complete first system, not task 1 of 1,000.
+                      One product. One generation. Less time, fewer tokens.
                     </p>
                   </div>
                 </div>
@@ -404,7 +430,11 @@ export default function LaborLoginExperience({ busy, error, onSignIn }) {
                     <h2 className="mt-4 text-2xl font-semibold leading-8 tracking-normal text-white sm:text-3xl sm:leading-9">
                       A system that learns how to search.
                     </h2>
-                    <p className="mt-5 text-sm leading-6 text-slate-400 sm:text-base sm:leading-7">
+                    <p className="mt-5 text-sm font-medium leading-6 text-slate-200 sm:text-base sm:leading-7">
+                      Labor can create the idea for you through a new kind of
+                      autonomous system called Evolver.
+                    </p>
+                    <p className="mt-3 text-sm leading-6 text-slate-400 sm:text-base sm:leading-7">
                       An <strong className="font-semibold text-white">Evolver</strong>{" "}
                       is software that starts with a direction, not a fixed answer.
                       It explores different paths, keeps what works, remembers what
@@ -511,35 +541,73 @@ export default function LaborLoginExperience({ busy, error, onSignIn }) {
               </section>
 
               <footer className="labor-login__footer px-5 py-12 text-center sm:px-10 sm:py-16">
-                <div className="mx-auto flex size-10 items-center justify-center rounded-full border border-violet-200/20 bg-violet-300/[0.08] text-violet-100">
-                  <Sparkles size={16} />
-                </div>
-                <div className="mt-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-200/70">
-                  The builder economy
-                </div>
-                <h2 className="mx-auto mt-3 max-w-2xl text-2xl font-semibold leading-8 tracking-normal text-white sm:text-3xl sm:leading-10">
-                  The future belongs to people who keep building.
-                </h2>
-                <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base sm:leading-7">
-                  You do not need permission, a giant team, or a perfect plan.
-                  Every meaningful product began with someone willing to make the
-                  first version and put it into the world.
-                </p>
+                <div className="mx-auto max-w-4xl">
+                  <div className="labor-login__autopilot-badge">
+                    <span
+                      className="labor-login__autopilot-dot"
+                      aria-hidden="true"
+                    />
+                    The builder economy
+                  </div>
 
-                <div className="labor-login__builder-loop mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-400 sm:gap-4">
-                  <span>Build</span>
-                  <ArrowRight size={12} className="text-violet-200/50" />
-                  <span>Ship</span>
-                  <ArrowRight size={12} className="text-violet-200/50" />
-                  <span>Listen</span>
-                  <ArrowRight size={12} className="text-violet-200/50" />
-                  <span>Build again</span>
-                </div>
+                  <h2 className="mx-auto mt-5 max-w-2xl text-2xl font-semibold leading-8 tracking-normal text-white sm:text-3xl sm:leading-10">
+                    Let Evolver run the show.
+                  </h2>
+                  <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base sm:leading-7">
+                    It finds the idea, builds the product, ships it, and stays
+                    to manage what comes next.
+                  </p>
 
-                <p className="mx-auto mt-8 max-w-xl text-base font-semibold leading-7 text-violet-100">
-                  Labor gives you leverage. Your courage gives it direction.
-                  <span className="ml-1 text-white">Keep building.</span>
-                </p>
+                  <div
+                    className="labor-login__autopilot-route mx-auto mt-9"
+                    aria-label="Evolver autonomous product lifecycle"
+                  >
+                    <div
+                      className="labor-login__autopilot-line"
+                      aria-hidden="true"
+                    />
+                    {EVOLVER_AUTOPILOT.map(
+                      ({ label, icon: Icon }, index) => (
+                        <div
+                          key={label}
+                          className="labor-login__autopilot-step"
+                          style={{ "--labor-autopilot-step": index }}
+                        >
+                          <div className="labor-login__autopilot-icon">
+                            <Icon size={16} strokeWidth={1.7} />
+                          </div>
+                          <span>{label}</span>
+                        </div>
+                      ),
+                    )}
+                  </div>
+
+                  <div className="labor-login__curiosity-panel mx-auto mt-10">
+                    <div className="labor-login__curiosity-rest">
+                      <div className="labor-login__curiosity-icon">
+                        <Coffee size={17} strokeWidth={1.7} />
+                      </div>
+                      <div className="text-left">
+                        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                          Your role
+                        </div>
+                        <p className="mt-1 text-sm font-medium text-slate-200">
+                          Chill. Relax. Let&apos;s see what happens.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="labor-login__curiosity-question text-left">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        The question
+                      </div>
+                      <p className="mt-1 text-base font-semibold leading-6 text-white sm:text-lg">
+                        Whose Evolver finds the next{" "}
+                        <span>billion-dollar idea?</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </footer>
             </article>
           </div>

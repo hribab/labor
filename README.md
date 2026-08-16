@@ -72,6 +72,8 @@ Labor still validates, repairs, builds, and deploys the result. But it gives the
 
 ## Evolver: direction before destination
 
+**Labor can create the idea for you through a new kind of autonomous system called Evolver.**
+
 An agent receives a destination. An Evolver receives a direction.
 
 Labor's first direction is `0 -> 1`: search for software worth building. Evolver creates candidate genomes, attacks weak ideas, keeps diverse survivors, remembers why ideas lived or died, and changes how the next generation is created.

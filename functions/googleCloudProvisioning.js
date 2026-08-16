@@ -6,6 +6,8 @@ const AdmZip = require("adm-zip");
 const { GoogleAuth, Impersonated, OAuth2Client } = require("google-auth-library");
 
 const GOOGLE_CLOUD_SCOPE = "https://www.googleapis.com/auth/cloud-platform";
+const GOOGLE_ANALYTICS_READONLY_SCOPE =
+  "https://www.googleapis.com/auth/analytics.readonly";
 const GOOGLE_ANALYTICS_VIEWER_ROLE = "predefinedRoles/viewer";
 const GOOGLE_ANALYTICS_READER_ROLES = new Set([
   GOOGLE_ANALYTICS_VIEWER_ROLE,
@@ -53,6 +55,8 @@ const CLOUD_BUILD_SERVICE_ACCOUNT_POLL_MS = 5000;
 const CLOUD_BUILD_SERVICE_ACCOUNT_ATTEMPTS = 24;
 const RUNTIME_PERMISSION_POLL_MS = 5000;
 const RUNTIME_PERMISSION_ATTEMPTS = 60;
+const ANALYTICS_ACCESS_POLL_MS = 4000;
+const ANALYTICS_ACCESS_ATTEMPTS = 24;
 
 const REQUIRED_CONNECTION_PERMISSIONS = [
   "cloudbuild.builds.get",
@@ -745,13 +749,16 @@ function createGoogleCloudProvisioner({
     return platformServiceAccountEmailPromise;
   }
 
-  function impersonatedAuthClient(serviceAccountEmail) {
+  function impersonatedAuthClient(
+    serviceAccountEmail,
+    targetScopes = [GOOGLE_CLOUD_SCOPE]
+  ) {
     return sourceAuthClient().then(
       (client) =>
         new Impersonated({
           sourceClient: client,
           targetPrincipal: serviceAccountEmail,
-          targetScopes: [GOOGLE_CLOUD_SCOPE],
+          targetScopes,
           lifetime: 3600,
         })
     );
@@ -2019,6 +2026,95 @@ function createGoogleCloudProvisioner({
     };
   }
 
+  function analyticsAccessErrorIsRetryable(error) {
+    const message = errorMessage(error);
+    if (
+      /insufficient authentication scopes|access_token_scope_insufficient/i.test(
+        message
+      )
+    ) {
+      return false;
+    }
+    const status = Number(error?.googleStatus || 0);
+    return (
+      [403, 404, 409, 429, 500, 502, 503, 504].includes(status) ||
+      /permission|not found|not ready|propagat|temporar/i.test(message)
+    );
+  }
+
+  async function verifyAnalyticsPropertyViewerAccess({
+    propertyId,
+    serviceAccountEmail,
+  }) {
+    const propertyName = normalizeAnalyticsPropertyName(propertyId);
+    const runtimeAuthClient = await impersonatedAuthClient(serviceAccountEmail, [
+      GOOGLE_CLOUD_SCOPE,
+      GOOGLE_ANALYTICS_READONLY_SCOPE,
+    ]);
+    await googleRequest({
+      url: `https://analyticsdata.googleapis.com/v1beta/${propertyName}:runReport`,
+      authClient: runtimeAuthClient,
+      method: "POST",
+      body: {
+        dateRanges: [{ startDate: "today", endDate: "today" }],
+        metrics: [{ name: "activeUsers" }],
+        limit: 1,
+      },
+      timeoutMs: 60000,
+    });
+  }
+
+  async function ensureVerifiedAnalyticsPropertyViewerAccess({
+    propertyId,
+    serviceAccountEmail,
+    authClient,
+  }) {
+    let access = null;
+    let lastError = null;
+
+    for (let attempt = 0; attempt < ANALYTICS_ACCESS_ATTEMPTS; attempt += 1) {
+      if (attempt > 0) await delay(ANALYTICS_ACCESS_POLL_MS);
+      try {
+        access = await ensureAnalyticsPropertyViewerAccess({
+          propertyId,
+          serviceAccountEmail,
+          authClient,
+        });
+        await verifyAnalyticsPropertyViewerAccess({
+          propertyId,
+          serviceAccountEmail,
+        });
+        return {
+          ...access,
+          verified: true,
+          verifiedAtMs: Date.now(),
+        };
+      } catch (error) {
+        lastError = error;
+        if (!analyticsAccessErrorIsRetryable(error)) break;
+      }
+    }
+
+    const scopeMissing =
+      /insufficient authentication scopes|access_token_scope_insufficient/i.test(
+        errorMessage(lastError)
+      );
+    throw provisioningError(
+      scopeMissing
+        ? "Google did not grant Analytics user management. Connect again and allow the requested Analytics permission."
+        : `Labor could not verify GA4 Viewer access for ${serviceAccountEmail}. ${errorMessage(
+            lastError
+          )}`,
+      scopeMissing
+        ? "analytics_manage_users_scope_required"
+        : "analytics_runtime_access_not_ready",
+      {
+        googleStatus: Number(lastError?.googleStatus || 0),
+        googleData: lastError?.googleData,
+      }
+    );
+  }
+
   async function writeFirestoreDocuments({ projectId, authClient, documents }) {
     const writes = documents.map(({ path: documentPath, data }) => ({
       update: {
@@ -2650,11 +2746,12 @@ function createGoogleCloudProvisioner({
       };
       if (analyticsPropertyId) {
         try {
-          analyticsRuntimeAccess = await ensureAnalyticsPropertyViewerAccess({
-            propertyId: analyticsPropertyId,
-            serviceAccountEmail,
-            authClient: delegatedSetupAuthClient,
-          });
+          analyticsRuntimeAccess =
+            await ensureVerifiedAnalyticsPropertyViewerAccess({
+              propertyId: analyticsPropertyId,
+              serviceAccountEmail,
+              authClient: delegatedSetupAuthClient,
+            });
         } catch (error) {
           const permissionRequired = Number(error?.googleStatus) === 403;
           analyticsRuntimeAccess = {
@@ -2849,6 +2946,110 @@ function createGoogleCloudProvisioner({
         preserveAccessToken: Boolean(accessToken),
       });
     }
+  }
+
+  async function repairAnalyticsAccess({ identity, userDocId, connection }) {
+    const normalizedUserDocId = safeDocumentId(userDocId || identity?.email);
+    const accessToken = cleanString(connection?.accessToken);
+    if (!accessToken) {
+      throw provisioningError(
+        "Google did not return an Analytics authorization token. Connect again.",
+        "analytics_access_token_missing"
+      );
+    }
+
+    const { configRef, deploymentRef } = refs(normalizedUserDocId);
+    const [configSnapshot, identityResult] = await Promise.all([
+      configRef.get(),
+      googleRequest({
+        url: "https://openidconnect.googleapis.com/v1/userinfo",
+        accessToken,
+      }),
+    ]);
+    const config = configSnapshot.exists ? configSnapshot.data() || {} : {};
+    const googleEmail = cleanString(identityResult.data?.email).toLowerCase();
+    if (
+      !googleEmail ||
+      googleEmail !== cleanString(identity?.email).toLowerCase()
+    ) {
+      throw provisioningError(
+        "Connect the same Google account you use to sign in to Labor.",
+        "google_account_mismatch"
+      );
+    }
+
+    const projectId = cleanString(
+      config.selectedProjectId || config.defaultProjectId
+    );
+    const serviceAccountEmail = cleanString(config.serviceAccountEmail);
+    if (!projectId || !serviceAccountEmail) {
+      throw provisioningError(
+        "Connect Google Cloud before restoring Analytics.",
+        "customer_cloud_not_ready"
+      );
+    }
+
+    const delegatedAuthClient = delegatedUserAuthClient(
+      accessToken,
+      Date.now() + 55 * 60 * 1000
+    );
+    const analyticsDetails = await getAnalyticsDetails({
+      projectId,
+      authClient: delegatedAuthClient,
+    });
+    const propertyId = cleanString(
+      analyticsDetails?.analyticsProperty?.id ||
+        config.resources?.analytics?.propertyId
+    );
+    if (!normalizeAnalyticsPropertyName(propertyId)) {
+      throw provisioningError(
+        "This Firebase project is not linked to a GA4 property yet.",
+        "analytics_property_not_linked"
+      );
+    }
+
+    const runtimeAccess = await ensureVerifiedAnalyticsPropertyViewerAccess({
+      propertyId,
+      serviceAccountEmail,
+      authClient: delegatedAuthClient,
+    });
+    const resources = {
+      ...(config.resources || {}),
+      analytics: {
+        ...(config.resources?.analytics || {}),
+        status: "connected",
+        propertyId: cleanString(propertyId).replace(/^properties\//, ""),
+        runtimeAccess,
+        error: "",
+      },
+    };
+    const repairedAtMs = Date.now();
+    const patch = {
+      resources,
+      analyticsRuntimeAccessStatus: "ready",
+      analyticsRuntimeAccessRepairedAtMs: repairedAtMs,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+    await Promise.all([
+      configRef.set(patch, { merge: true }),
+      deploymentRef.set(patch, { merge: true }),
+    ]);
+
+    logger.info("Restored GA4 access for the customer runtime", {
+      projectId,
+      propertyId: cleanString(propertyId).replace(/^properties\//, ""),
+      serviceAccountEmail,
+    });
+    return {
+      connected: true,
+      ready: true,
+      status: "ready",
+      projectId,
+      propertyId: cleanString(propertyId).replace(/^properties\//, ""),
+      serviceAccountEmail,
+      runtimeAccess,
+      repairedAtMs,
+    };
   }
 
   async function loadDeploymentTarget(userDocId, { requireReady = true } = {}) {
@@ -3230,6 +3431,7 @@ function createGoogleCloudProvisioner({
   return {
     coreFunctionNames: CORE_FUNCTION_NAMES,
     requiredConnectionPermissions: REQUIRED_CONNECTION_PERMISSIONS,
+    repairAnalyticsAccess,
     saveConnection,
     provisionProject,
     refreshProvisioningStatus,

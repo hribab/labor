@@ -856,6 +856,28 @@ exports.configurationAgent = onRequest(
         });
       }
 
+      if (action === "repair_google_analytics_access") {
+        if (FIREBASE_PROJECT_ID !== CONTROL_FIREBASE_PROJECT_ID) {
+          const err = new Error(
+            "Google Analytics access must be restored through Labor's control plane."
+          );
+          err.code = "analytics_repair_wrong_project";
+          err.statusCode = 409;
+          throw err;
+        }
+        const identity = await authenticatePlatformRequest(req, email);
+        const repaired = await googleCloudProvisioner.repairAnalyticsAccess({
+          identity,
+          userDocId: configurationUserDocId(identity, userDocId),
+          connection: req.body?.connection || {},
+        });
+        return res.status(200).json({
+          ok: true,
+          actionType: "repair_google_analytics_access",
+          ...repaired,
+        });
+      }
+
       if (action === "validate_api_auth") {
         const validation = await validateApiAuthentication(req.body || {});
         return res.status(200).json({
