@@ -102,9 +102,9 @@ const GOOGLE_CLOUD_REQUIRED_DEPLOYMENT_PERMISSIONS =
 const GENERATED_APPLICATION_COLLECTION = "generatedapplication";
 const GENERATED_FIREBASE_WEB_CONFIG =
   readGeneratedFirebaseWebConfig();
-const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-5.6-sol";
+const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-6-astra";
 const LABOR_EVOLUTION_MODEL_ID = "gpt-5.6-luna";
-const LABOR_AD_HOC_MODEL_ID = "gpt-5.6-sol";
+const LABOR_AD_HOC_MODEL_ID = "gpt-6-astra";
 const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-latest";
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-pro";
 const XAI_MODEL = process.env.XAI_MODEL || "grok-4";

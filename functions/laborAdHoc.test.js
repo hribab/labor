@@ -20,7 +20,7 @@ const generator = createLaborAdHocGenerator({
   handleCors: () => false,
   getHttpStatus: () => 500,
   getErrorMessage: (error) => error.message,
-  loadConfiguredLlm: async () => ({ provider: "openai", modelId: "gpt-5.6-sol" }),
+  loadConfiguredLlm: async () => ({ provider: "openai", modelId: "gpt-6-astra" }),
   callStructuredLlm: async () => ({}),
   serializeLlmProvider: (value) => value,
 });
@@ -125,7 +125,7 @@ test("structured output requires and normalizes exactly ten genome-linked ideas"
     generationId: "adhoc_test",
     generationNumber: 2,
     customInstructionsPresent: false,
-    model: { provider: "openai", modelId: "gpt-5.6-sol" },
+    model: { provider: "openai", modelId: "gpt-6-astra" },
     createdAtMs: 1,
   });
 
