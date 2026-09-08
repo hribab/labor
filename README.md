@@ -6,10 +6,14 @@
 
 <h1 align="center">Labor</h1>
 
-<p align="center"><strong>Build it. Release it. Keep it alive.</strong></p>
+<p align="center"><strong>Build, deploy, and manage your product.</strong></p>
 
 <p align="center">
-  A free, open-source autonomous product builder that turns an idea into deployed software and stays to manage what comes next.
+  Labor is a free, open-source AI system that turns your ideas into working products using your model and your cloud.
+</p>
+
+<p align="center">
+  <a href="https://uselabor.com"><strong>Try the free hosted version at uselabor.com</strong></a>
 </p>
 
 <p align="center">
@@ -32,15 +36,9 @@
 
 ## Why Labor exists
 
-The hard part of a product is rarely writing one more component. It is carrying an idea all the way into the world.
+Building software is getting easier. Getting it into people's hands still takes work: deployment, releases, reaching users, listening to feedback, and deciding what to improve.
 
-**Hardworking solopreneurs should not spend sleepless nights stitching together tools that should work for them.**
-
-**Great entrepreneurs should not be stopped because a builder is missing from the room.**
-
-**New graduates should be able to turn an idea into something useful without capital, a large team, or gatekeepers.**
-
-Labor exists to give those builders leverage. Bring an idea and Labor generates the product, deploys it into your cloud, prepares the release, and keeps managing the work after launch. Bring no idea and Evolver searches for one.
+Labor connects your model to your cloud and helps carry your idea through that work. It builds the product, puts it online, prepares launch material to help you reach users, and manages updates after release.
 
 ## The Forever Free Pledge
 
@@ -52,6 +50,8 @@ Read the full [Forever Free Pledge](docs/FOREVER_FREE.md).
 
 ## What Labor does
 
+At its core, Labor connects your model and your cloud so an idea becomes a product other people can use. You can also connect your own domain.
+
 ```text
 IDEA -> CODE -> CLOUD -> RELEASE -> MANAGE
 ```
@@ -62,27 +62,25 @@ IDEA -> CODE -> CLOUD -> RELEASE -> MANAGE
 - **Keeps working:** it can inspect outcomes, propose features, update the product, and manage future releases.
 - **Finds ideas:** Agent can generate and launch a batch; Evolver searches through mutation, pressure, selection, and memory.
 
-## A different bet: Single Shot Product Generation
+## Single Shot Product Generation
 
-Most coding agents assume people must divide a product into hundreds of tasks and supervise every step. Labor is built on a different assumption: capable models can see enough of the whole product to generate a coherent first system in one generation.
+Give Labor the whole product you want to build. It asks the model for a complete first version in one generation, including the frontend, backend, and the connections between them.
 
-The **product** is the unit of work, not the ticket.
+This follows a simple assumption: as models improve, they can handle more of a product in a single call. Giving the model the full product intent can save time and tokens by reducing repeated instructions and keeping related parts of the system together.
 
-Labor still validates, repairs, builds, and deploys the result. But it gives the model the complete intent first, preserving the relationships that disappear when a product is fragmented into disconnected prompts.
+Labor then validates the result, repairs problems when needed, builds it, and deploys it.
 
-## Evolver: direction before destination
+## Evolver: finding software worth building
 
-**Labor can create the idea for you through a new kind of autonomous system called Evolver.**
+Labor also helps when you do not have an idea yet. **Evolver** is a new kind of autonomous software designed to change across generations. Labor uses it to search for software worth building.
 
-An agent receives a destination. An Evolver receives a direction.
-
-Labor's first direction is `0 -> 1`: search for software worth building. Evolver creates candidate genomes, attacks weak ideas, keeps diverse survivors, remembers why ideas lived or died, and changes how the next generation is created.
+You give Evolver a starting direction. In Labor, that direction is `0 -> 1`: find software worth building. It creates structured idea blueprints called genomes, mutates and combines them, tests the resulting ideas, and keeps diverse survivors. It remembers what survived and what failed, then uses that history to change how it searches next time.
 
 ```text
 OBSERVE -> REMEMBER -> BREED -> ATTACK -> SELECT -> EVOLVE
 ```
 
-The exact product is not named in advance. It emerges from variation, pressure, survival, and memory. Labor can then build, deploy, release, and manage each survivor.
+Labor can take the surviving ideas through code generation, deployment, release, and ongoing management.
 
 ## Your model. Your cloud. Your product.
 
